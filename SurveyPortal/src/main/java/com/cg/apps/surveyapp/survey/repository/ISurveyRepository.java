@@ -3,6 +3,8 @@ package com.cg.apps.surveyapp.survey.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.cg.apps.surveyapp.exceptions.SurveyNotFoundException;
+import com.cg.apps.surveyapp.exceptions.SurveyorNotFoundException;
 import com.cg.apps.surveyapp.survey.entities.Survey;
 
 @Repository("surveyRepo")

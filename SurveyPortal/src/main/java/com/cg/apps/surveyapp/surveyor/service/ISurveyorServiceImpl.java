@@ -76,10 +76,6 @@ public class ISurveyorServiceImpl implements ISurveyorService {
 			logger.info(SurveyExceptionMessages.SURVEYOR_NOT_FOUND);
 			throw new SurveyorNotFoundException(SurveyExceptionMessages.SURVEYOR_NOT_FOUND);
 		}
-		if (surv.get().getCreatedSurveys() == null) {
-			logger.info(SurveyExceptionMessages.SURVEY_NOT_FOUND);
-			throw new SurveyorNotFoundException(SurveyExceptionMessages.SURVEY_NOT_FOUND);
-		}
 		for (Survey survey : surv.get().getCreatedSurveys()) {
 			if (survey.getPublishedDateTime().isAfter(dateTime)) {
 				listOfSurvey.add(survey);

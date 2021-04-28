@@ -17,6 +17,7 @@ import com.cg.apps.surveyapp.exceptions.SurveyExceptionMessages;
 import com.cg.apps.surveyapp.exceptions.SurveyNotFoundException;
 import com.cg.apps.surveyapp.feedback.entities.Feedback;
 import com.cg.apps.surveyapp.feedback.repository.IFeedbackRepository;
+import com.cg.apps.surveyapp.participant.entities.Participant;
 import com.cg.apps.surveyapp.question.entities.Option;
 import com.cg.apps.surveyapp.survey.entities.Survey;
 import com.cg.apps.surveyapp.survey.repository.ISurveyRepository;
@@ -33,10 +34,13 @@ public class IFeedbackServiceImpl implements IFeedbackService {
 	private Logger logger = LoggerFactory.getLogger(IFeedbackServiceImpl.class);
 
 	@Override
-	public Feedback createFeedback(Feedback feedback) {
-
-		logger.info(feedback.toString());
-		return feedbackRepo.save(feedback);
+	public Feedback createFeedback(Survey survey, Participant participant, Map<Long, Option> answers) {
+		Feedback feed = new Feedback();
+		feed.setChosenAnswers(answers);
+		feed.setSurvey(survey);
+		feed.setParticipant(participant);
+		logger.info(feed.toString());
+		return feedbackRepo.save(feed);
 	}
 
 	@Override

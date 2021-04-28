@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cg.apps.surveyapp.exceptions.InvalidSurveyorException;
-import com.cg.apps.surveyapp.exceptions.InvalidTopicNameException;
 import com.cg.apps.surveyapp.exceptions.SurveyExceptionMessages;
 import com.cg.apps.surveyapp.exceptions.TopicNotFoundException;
+import com.cg.apps.surveyapp.surveyor.entities.Surveyor;
 import com.cg.apps.surveyapp.topic.entities.Topic;
 import com.cg.apps.surveyapp.topic.repository.ITopicRepository;
 
@@ -26,13 +26,13 @@ public class ITopicServiceImpl implements ITopicService {
 	private Logger logger = LoggerFactory.getLogger(ITopicServiceImpl.class);
 
 	@Override
-	public Topic createTopic(Topic topic) throws InvalidSurveyorException {
-
-		if (topic == null) {
-			logger.error(SurveyExceptionMessages.INVALID_TOPIC_NAME);
-			throw new InvalidTopicNameException(SurveyExceptionMessages.INVALID_TOPIC_NAME);
+	public Topic createTopic(Surveyor surveyor, String topicName) throws InvalidSurveyorException {
+		Topic topic = new Topic(surveyor, topicName);
+		Topic newTopic = topicRepo.save(topic);
+		if (newTopic.toString() != null) {
+			logger.info(newTopic.toString());
 		}
-		return topicRepo.save(topic);
+		return newTopic;
 	}
 
 	@Override

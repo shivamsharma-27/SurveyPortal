@@ -2,6 +2,8 @@ package com.cg.testing;
 
 import static org.junit.Assert.assertEquals;
 
+import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +21,12 @@ import com.cg.apps.surveyapp.participant.service.IParticipantServiceImpl;
 @DataJpaTest
 @Import(IParticipantServiceImpl.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class IParticipantServiceImplTest {
+public class IParticipantServiceImplTest {
 
 	@Autowired
 	private IParticipantService participantService;
+	@Autowired
+	private EntityManager em;
 
 	@Test
 	void register() {
@@ -35,15 +39,18 @@ class IParticipantServiceImplTest {
 
 	@Test
 	void update() {
-		Participant participant = participantService.register(new Participant("Shivam_111", "Shivam", "Sharma"));
+		Participant participant = new Participant("Shivam_111", "Shivam", "Sharma");
+		em.persist(participant);
 		participant.setFirstName("Rahul");
 		Participant updatePart = participantService.update(participant);
+		em.persist(updatePart);
 		assertEquals(participant, updatePart);
 	}
 
 	@Test
 	void countParticipations() {
-		Participant participant = participantService.register(new Participant("Shivam_111", "Shivam", "Sharma"));
+		Participant participant = new Participant("Shivam_111", "Shivam", "Sharma");
+		em.persist(participant);
 		int count = participantService.countParticipations(participant);
 		assertEquals(0, count);
 

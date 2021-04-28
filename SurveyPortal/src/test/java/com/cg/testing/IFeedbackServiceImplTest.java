@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,12 @@ import com.cg.apps.surveyapp.topic.entities.Topic;
 @DataJpaTest
 @Import(IFeedbackServiceImpl.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class IFeedbackServiceImplTest {
+public class IFeedbackServiceImplTest {
 
 	@Autowired
 	private IFeedbackService feedbackService;
+	@Autowired
+	private EntityManager em;
 
 	@Test
 	void createFeedback() {
@@ -48,7 +52,7 @@ class IFeedbackServiceImplTest {
 		feedback.setChosenAnswers(chosenAnswers);
 		feedback.setParticipant(participant);
 		feedback.setSurvey(survey);
-		Feedback savedFeedback = feedbackService.createFeedback(feedback);
+		Feedback savedFeedback = feedbackService.createFeedback(survey, participant, chosenAnswers);
 		assertEquals(feedback.getChosenAnswers(), savedFeedback.getChosenAnswers());
 		assertEquals(feedback.getParticipant(), savedFeedback.getParticipant());
 		assertEquals(feedback.getSurvey(), savedFeedback.getSurvey());
@@ -70,7 +74,7 @@ class IFeedbackServiceImplTest {
 		feedback.setChosenAnswers(chosenAnswers);
 		feedback.setParticipant(participant);
 		feedback.setSurvey(survey);
-		Feedback savedFeedback = feedbackService.createFeedback(feedback);
+		Feedback savedFeedback = feedbackService.createFeedback(survey, participant, chosenAnswers);
 
 		chosenAnswers.put(4L, new Option(2, "Indian"));
 		Feedback updateFeedback = feedbackService.updateFeedback(savedFeedback.getId(),

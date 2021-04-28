@@ -50,7 +50,7 @@ public class IParticipantServiceImpl implements IParticipantService {
 			throw new InvalidParticipantException(SurveyExceptionMessages.PARTICIPANT_NOT_FOUND);
 		}
 		logger.info(participant.toString());
-		return participantRepo.save(part.get());
+		return participantRepo.save(participant);
 	}
 
 	@Override

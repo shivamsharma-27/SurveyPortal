@@ -119,12 +119,6 @@ public class Topic {
 		this.setTopicName(topicName2);
 	}
 
-	public Topic(String topicName2, String topicDescription2, Surveyor createdBy2) {
-		this.topicName = topicName2;
-		this.topicDescription = topicDescription2;
-		this.createdBy = createdBy2;
-	}
-
 	@Override
 	public String toString() {
 		return "Topic [id=" + id + ", topicName=" + topicName + ", topicDescription=" + topicDescription + "]";

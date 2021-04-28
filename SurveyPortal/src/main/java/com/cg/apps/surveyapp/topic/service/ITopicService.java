@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.cg.apps.surveyapp.exceptions.InvalidSurveyorException;
 import com.cg.apps.surveyapp.exceptions.TopicNotFoundException;
+import com.cg.apps.surveyapp.surveyor.entities.Surveyor;
 import com.cg.apps.surveyapp.topic.entities.Topic;
 
 public interface ITopicService {
 
-	Topic createTopic(Topic topic) throws InvalidSurveyorException;
+	Topic createTopic(Surveyor surveyor, String topicName) throws InvalidSurveyorException;
 
 	Topic findById(Long id) throws TopicNotFoundException;
 

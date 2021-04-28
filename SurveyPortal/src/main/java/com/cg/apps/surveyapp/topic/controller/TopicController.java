@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.apps.surveyapp.dto.TopicDetails;
-import com.cg.apps.surveyapp.pojos.TopicRequest;
 import com.cg.apps.surveyapp.topic.entities.Topic;
 import com.cg.apps.surveyapp.topic.service.ITopicService;
 import com.cg.util.TopicUtil;
@@ -40,10 +39,9 @@ public class TopicController {
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PostMapping("/add")
-	public TopicDetails addTopic(@RequestBody @Valid TopicRequest topicDetails) {
-		Topic topic = new Topic(topicDetails.getTopicName(), topicDetails.getTopicDescription(),
-				topicDetails.getCreatedBy());
-		Topic top = topicService.createTopic(topic);
+	public TopicDetails addTopic(@RequestBody @Valid Topic topic) {
+
+		Topic top = topicService.createTopic(topic.getCreatedBy(), topic.getTopicName());
 		return topicUtil.toDetails(top);
 	}
 
@@ -61,7 +59,7 @@ public class TopicController {
 	}
 
 	@PostMapping("/update")
-	public TopicDetails updateTopic(@RequestBody @Valid TopicRequest topic) {
+	public TopicDetails updateTopic(@RequestBody @Valid Topic topic) {
 
 		Topic top = topicService.updateTopic(topic.getId(), topic.getTopicName(), topic.getTopicDescription());
 		return topicUtil.toDetails(top);

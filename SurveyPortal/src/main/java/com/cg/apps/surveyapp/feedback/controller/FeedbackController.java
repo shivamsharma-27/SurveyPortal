@@ -15,15 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.apps.surveyapp.dto.FeedbackDetails;
 import com.cg.apps.surveyapp.feedback.entities.Feedback;
 import com.cg.apps.surveyapp.feedback.service.IFeedbackService;
-import com.cg.apps.surveyapp.pojos.FeedbackRequest;
-import com.cg.apps.surveyapp.pojos.SurveyRequest;
 import com.cg.apps.surveyapp.survey.entities.Survey;
 import com.cg.util.FeedbackUtil;
 
@@ -44,10 +41,10 @@ public class FeedbackController {
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PostMapping("/add")
-	public FeedbackDetails addFeedback(@RequestBody @Valid FeedbackRequest feedbackDetails) {
-		Feedback feedback = new Feedback(feedbackDetails.getSurvey(), feedbackDetails.getPostedDateTime(),
-				feedbackDetails.getParticipant(), feedbackDetails.getChosenAnswers());
-		Feedback feed = feedbackService.createFeedback(feedback);
+	public FeedbackDetails addFeedback(@RequestBody @Valid Feedback feedbackDetails) {
+
+		Feedback feed = feedbackService.createFeedback(feedbackDetails.getSurvey(), feedbackDetails.getParticipant(),
+				feedbackDetails.getChosenAnswers());
 		return feedUtil.toDetails(feed);
 	}
 
@@ -58,25 +55,21 @@ public class FeedbackController {
 	}
 
 	@PostMapping("/update")
-	public FeedbackDetails updateFeedback(@RequestBody @Valid FeedbackRequest feedback) {
+	public FeedbackDetails updateFeedback(@RequestBody @Valid Feedback feedback) {
 
 		Feedback feed = feedbackService.updateFeedback(feedback.getId(), feedback.getChosenAnswers());
 		return feedUtil.toDetails(feed);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public void removeByFeedbackById(@PathVariable("id") Long feedbackId) {
+	public void removeByFeedbackById(@PathVariable Long feedbackId) {
 		feedbackService.removeByFeedbackById(feedbackId);
 	}
 
-	@GetMapping("/find/by/date")
-	public List<FeedbackDetails> findFeedbacksForSurveyAfterDateTime(@RequestBody SurveyRequest survey,
-			@RequestParam(value = "dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTime) {
-
-		List<Feedback> feedbacks = feedbackService.findFeedbacksForSurveyAfterDateTime(
-				new Survey(survey.getId(), survey.getDescription(), survey.getTopic(), survey.getPostedBy(),
-						survey.getPublishedDateTime(), survey.getEndDateTime(), survey.getActive()),
-				dateTime);
+	@GetMapping("/find/{dateTime}")
+	public List<FeedbackDetails> findFeedbacksForSurveyAfterDateTime(@RequestBody Survey survey,
+			@PathVariable("dateTime") @DateTimeFormat(pattern = "dd-mm-yyyy") LocalDate dateTime) {
+		List<Feedback> feedbacks = feedbackService.findFeedbacksForSurveyAfterDateTime(survey, dateTime);
 		return feedUtil.toDetails(feedbacks);
 	}
 

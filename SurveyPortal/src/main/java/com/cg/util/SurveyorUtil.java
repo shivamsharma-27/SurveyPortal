@@ -19,12 +19,7 @@ public class SurveyorUtil {
 
 	public SurveyorDetails toDetails(Surveyor surveyor) {
 		List<Survey> surveyList = surveyor.getCreatedSurveys();
-		List<SurveyDetails> surveys = new ArrayList<>();
-		if (surveyList != null) {
-			for (Survey survey : surveyList) {
-				surveys.add(new SurveyDetails(surveyUtil.toDetails(survey)));
-			}
-		}
+		List<SurveyDetails> surveys = surveyUtil.toDetails(surveyList);
 		return new SurveyorDetails(surveyor.getId(), surveyor.getUsername(), surveyor.getFirstName(),
 				surveyor.getLastName(), surveys);
 	}

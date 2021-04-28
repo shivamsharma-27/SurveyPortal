@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.apps.surveyapp.dto.QuestionDetails;
-import com.cg.apps.surveyapp.pojos.QuestionRequest;
 import com.cg.apps.surveyapp.question.entities.Question;
 import com.cg.apps.surveyapp.question.service.IQuestionService;
 import com.cg.util.QuestionUtil;
@@ -28,19 +27,16 @@ public class QuestionController {
 	private QuestionUtil quesUtil;
 
 	@PostMapping("/add")
-	public QuestionDetails addQuestion(@RequestBody QuestionRequest questionDetails) {
-		Question question = new Question(questionDetails.getQuestionText(), questionDetails.getSurvey(),
-				questionDetails.getOptions());
-		Question quest = questionService.createQuestion(question);
-		return quesUtil.toDetails(quest);
+	public QuestionDetails addQuestion(@RequestBody Question questionDetails) {
+		Question question = questionService.createQuestion(questionDetails.getSurvey(),
+				questionDetails.getQuestionText(), questionDetails.getOptions());
+		return quesUtil.toDetails(question);
 	}
 
 	@PostMapping("/update")
-	public QuestionDetails updateQuestion(@RequestBody QuestionRequest questionDetails) {
-		Question question = new Question(questionDetails.getId(), questionDetails.getQuestionText(),
-				questionDetails.getSurvey(), questionDetails.getOptions());
-		Question quest = questionService.updateQuestion(question);
-		return quesUtil.toDetails(quest);
+	public QuestionDetails updateQuestion(@RequestBody Question questionDetails) {
+		Question question = questionService.updateQuestion(questionDetails);
+		return quesUtil.toDetails(question);
 	}
 
 	@DeleteMapping("/delete/{id}")
@@ -49,8 +45,8 @@ public class QuestionController {
 		return quesUtil.toDetails(question);
 	}
 
-	@GetMapping("/find/{id}")
-	public QuestionDetails findById(@PathVariable("id") Long id) {
+	@GetMapping("/find/id")
+	public QuestionDetails findById(Long id) {
 
 		Question question = questionService.findById(id);
 		return quesUtil.toDetails(question);

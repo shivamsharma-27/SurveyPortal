@@ -86,13 +86,6 @@ public class Question {
 		this.questionText = questionText;
 	}
 
-	public Question(@NotBlank String questionText, Survey survey, List<Option> options) {
-		super();
-		this.questionText = questionText;
-		this.survey = survey;
-		this.options = options;
-	}
-
 	@Override
 	public String toString() {
 		return "Question [id=" + id + ", questionText=" + questionText + ", options=" + options + "]";

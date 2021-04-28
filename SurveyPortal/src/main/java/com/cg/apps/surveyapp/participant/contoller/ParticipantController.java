@@ -22,7 +22,6 @@ import com.cg.apps.surveyapp.dto.ParticipantDetails;
 import com.cg.apps.surveyapp.feedback.entities.Feedback;
 import com.cg.apps.surveyapp.participant.entities.Participant;
 import com.cg.apps.surveyapp.participant.service.IParticipantService;
-import com.cg.apps.surveyapp.pojos.ParticipantRequest;
 import com.cg.util.FeedbackUtil;
 import com.cg.util.ParticipantUtil;
 
@@ -48,10 +47,8 @@ public class ParticipantController {
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PostMapping("/add")
-	public ParticipantDetails addParticipant(@RequestBody @Valid ParticipantRequest participantDetails) {
-		Participant participant = new Participant(participantDetails.getUsername(), participantDetails.getFirstName(),
-				participantDetails.getLastName());
-		Participant part = participantService.register(participant);
+	public ParticipantDetails addParticipant(@RequestBody @Valid Participant participantDetails) {
+		Participant part = participantService.register(participantDetails);
 		return partUtil.toDetails(part);
 	}
 
@@ -62,30 +59,23 @@ public class ParticipantController {
 	}
 
 	@GetMapping("/count/participations")
-	public int countParticipations(@RequestBody @Valid ParticipantRequest participantDetails) {
+	public int countParticipations(@RequestBody @Valid Participant participant) {
 		int count = 0;
-		Participant participant = new Participant(participantDetails.getId(), participantDetails.getUsername(),
-				participantDetails.getFirstName(), participantDetails.getLastName());
 		count = participantService.countParticipations(participant);
 		return count;
 	}
 
 	@PostMapping("/update")
-	public ParticipantDetails updateParticipant(@RequestBody @Valid ParticipantRequest participantDetails) {
-		Participant participant = new Participant(participantDetails.getId(), participantDetails.getUsername(),
-				participantDetails.getFirstName(), participantDetails.getLastName());
+	public ParticipantDetails updateParticipant(@RequestBody @Valid Participant participant) {
+
 		Participant part = participantService.update(participant);
 		return partUtil.toDetails(part);
 	}
 
 	@GetMapping("/find/feedback/{dateTime}")
-	public List<FeedbackDetails> findFeedbacksByParticipantAfterDateTime(
-			@RequestBody @Valid ParticipantRequest participantDetails,
-			@PathVariable("dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTime) {
-		List<Feedback> feedbacks = participantService.findFeedbacksByParticipantAfterDateTime(
-				new Participant(participantDetails.getId(), participantDetails.getUsername(),
-						participantDetails.getFirstName(), participantDetails.getLastName()),
-				dateTime);
+	public List<FeedbackDetails> findFeedbacksByParticipantAfterDateTime(@RequestBody @Valid Participant participant,
+			@PathVariable("dateTime") @DateTimeFormat(pattern = "dd-mm-yyyy") LocalDate dateTime) {
+		List<Feedback> feedbacks = participantService.findFeedbacksByParticipantAfterDateTime(participant, dateTime);
 		return feedUtil.toDetails(feedbacks);
 	}
 }

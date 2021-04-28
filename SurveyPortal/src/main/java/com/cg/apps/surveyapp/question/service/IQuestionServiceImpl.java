@@ -1,5 +1,6 @@
 package com.cg.apps.surveyapp.question.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cg.apps.surveyapp.exceptions.QuestionNotFoundException;
 import com.cg.apps.surveyapp.exceptions.SurveyExceptionMessages;
 import com.cg.apps.surveyapp.exceptions.SurveyNotFoundException;
+import com.cg.apps.surveyapp.question.entities.Option;
 import com.cg.apps.surveyapp.question.entities.Question;
 import com.cg.apps.surveyapp.question.repository.IQuestionRepository;
+import com.cg.apps.surveyapp.survey.entities.Survey;
 
 @Service("questionService")
 @Transactional
@@ -35,11 +38,16 @@ public class IQuestionServiceImpl implements IQuestionService {
 	}
 
 	@Override
-	public Question createQuestion(Question question) {
-		if (question.getSurvey() == null) {
+	public Question createQuestion(Survey survey, String questionText, List<Option> options) {
+
+		if (survey == null) {
 			logger.error(SurveyExceptionMessages.INVALID_SURVEY);
 			throw new SurveyNotFoundException(SurveyExceptionMessages.INVALID_SURVEY);
 		}
+		Question question = new Question();
+		question.setQuestionText(questionText);
+		question.setSurvey(survey);
+		question.setOptions(options);
 		logger.info(question.toString());
 		return questionRepo.save(question);
 	}

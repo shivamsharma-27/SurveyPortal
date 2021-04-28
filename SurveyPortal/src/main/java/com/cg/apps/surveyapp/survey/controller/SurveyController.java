@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.apps.surveyapp.dto.ParticipantDetails;
 import com.cg.apps.surveyapp.dto.SurveyDetails;
-import com.cg.apps.surveyapp.pojos.SurveyRequest;
+import com.cg.apps.surveyapp.participant.entities.Participant;
 import com.cg.apps.surveyapp.survey.entities.Survey;
 import com.cg.apps.surveyapp.survey.service.ISurveyService;
 import com.cg.util.ParticipantUtil;
@@ -32,7 +31,7 @@ public class SurveyController {
 
 	@Autowired
 	private SurveyUtil surveyUtil;
-	@Autowired
+
 	private ParticipantUtil partUtil;
 
 	@RequestMapping("/hello")
@@ -42,45 +41,30 @@ public class SurveyController {
 	}
 
 	@PostMapping("/update")
-	public SurveyDetails updateSurvey(@RequestBody @Valid SurveyRequest surveyDetails) {
-		Survey survey = new Survey(surveyDetails.getId(), surveyDetails.getDescription(), surveyDetails.getTopic(),
-				surveyDetails.getPostedBy(), surveyDetails.getPublishedDateTime(), surveyDetails.getEndDateTime(),
-				surveyDetails.getActive());
+	public SurveyDetails updateSurvey(@RequestBody @Valid Survey survey) {
 		Survey sur = surveyService.updateSurveyDescription(survey.getId(), survey.getDescription());
 		return surveyUtil.toDetails(sur);
 	}
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@PostMapping("/add")
-	public SurveyDetails add(@RequestBody @Valid SurveyRequest surveyDetails) {
-		Survey survey = new Survey(surveyDetails.getDescription(), surveyDetails.getTopic(),
-				surveyDetails.getPostedBy(), surveyDetails.getPublishedDateTime(), surveyDetails.getEndDateTime(),
-				surveyDetails.getActive());
+	public SurveyDetails add(@RequestBody @Valid Survey survey) {
+
 		Survey sur = surveyService.add(survey);
 		return surveyUtil.toDetails(sur);
 	}
 
 	@GetMapping("/count/surveys")
-	public int countFeedbacksInSurvey(@RequestBody @Valid SurveyRequest surveyDetails) {
+	public int countFeedbacksInSurvey(@RequestBody @Valid Survey survey) {
 		int count = 0;
-		Survey survey = new Survey(surveyDetails.getId(), surveyDetails.getDescription(), surveyDetails.getTopic(),
-				surveyDetails.getPostedBy(), surveyDetails.getPublishedDateTime(), surveyDetails.getEndDateTime(),
-				surveyDetails.getActive());
 		count = surveyService.countFeedbacksInSurvey(survey);
 		return count;
 	}
 
 	@GetMapping("/participants")
-	public List<ParticipantDetails> findParticipants(@RequestBody @Valid SurveyRequest surveyDetails) {
-		Survey survey = new Survey(surveyDetails.getId(), surveyDetails.getDescription(), surveyDetails.getTopic(),
-				surveyDetails.getPostedBy(), surveyDetails.getPublishedDateTime(), surveyDetails.getEndDateTime(),
-				surveyDetails.getActive());
-		return partUtil.toDetails(surveyService.findParticipants(survey));
+	public List<ParticipantDetails> findParticipants(@RequestBody @Valid Survey survey) {
+		List<Participant> participants = surveyService.findParticipants(survey);
+		return partUtil.toDetails(participants);
 	}
 
-	@GetMapping("/find/{id}")
-	public SurveyDetails findById(@PathVariable("id") Long id) {
-		Survey survey = surveyService.findById(id);
-		return surveyUtil.toDetails(survey);
-	}
 }

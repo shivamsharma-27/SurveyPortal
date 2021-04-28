@@ -11,11 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyClass;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.cg.apps.surveyapp.participant.entities.Participant;
 import com.cg.apps.surveyapp.question.entities.Option;
+import com.cg.apps.surveyapp.question.entities.Question;
 import com.cg.apps.surveyapp.survey.entities.Survey;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -44,6 +46,7 @@ public class Feedback {
 	// read about @ElementCollection
 
 	@ElementCollection
+	@MapKeyClass(value = Question.class)
 	@MapKeyJoinColumn(name = "question_id")
 	@Column(name = "chosenAnswers")
 	private Map<Long, Option> chosenAnswers = new HashMap<>();
