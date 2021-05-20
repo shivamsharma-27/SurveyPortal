@@ -115,6 +115,13 @@ public class Surveyor {
 		this.lastName = lastName;
 	}
 
+	public Surveyor(Long id2, String username2, String firstName2, String lastName2) {
+		this.id = id2;
+		this.username = username2;
+		this.firstName = firstName2;
+		this.lastName = lastName2;
+	}
+
 	@Override
 	public String toString() {
 		return "Surveyor [id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName
