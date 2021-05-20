@@ -1,6 +1,7 @@
 package com.cg.apps.surveyapp.survey.entities;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,12 @@ import com.cg.apps.surveyapp.surveyor.entities.Surveyor;
 import com.cg.apps.surveyapp.topic.entities.Topic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+/**
+ * 
+ * survey entity based on a topic created by surveyor accepts feedback from
+ * participants
+ *
+ */
 @Entity
 @Table(name = "survey")
 public class Survey {
@@ -115,39 +122,38 @@ public class Survey {
 	public Survey(Long id,
 			@Size(min = 10, max = 100, message = "description must be 10 to 100 characters long") String description,
 			@Size(min = 3, max = 15, message = "topic must be 3 to 15 characters long") Topic topic, Surveyor postedBy,
-			LocalDate publishedDateTime, LocalDate endDateTime, Boolean active) {
+			Boolean active) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.topic = topic;
 		this.postedBy = postedBy;
-		this.publishedDateTime = publishedDateTime;
-		this.endDateTime = endDateTime;
+		this.publishedDateTime = LocalDate.now();
+		this.endDateTime = LocalDate.now().plusYears(1);
 		this.active = active;
 	}
 
 	public Survey(
 			@Size(min = 10, max = 100, message = "description must be 10 to 100 characters long") String description,
 			@Size(min = 3, max = 15, message = "topic must be 3 to 15 characters long") Topic topic, Surveyor postedBy,
-			LocalDate publishedDateTime, LocalDate endDateTime, Boolean active) {
+			Boolean active) {
 		super();
 		this.description = description;
 		this.topic = topic;
 		this.postedBy = postedBy;
-		this.publishedDateTime = publishedDateTime;
-		this.endDateTime = endDateTime;
+		this.publishedDateTime = LocalDate.now();
+		this.endDateTime = LocalDate.now().plusYears(1);
 		this.active = active;
 	}
 
 	public Survey(
 			@Size(min = 10, max = 100, message = "description must be 10 to 100 characters long") String description,
-			@Size(min = 3, max = 15, message = "topic must be 3 to 15 characters long") Topic topic,
-			LocalDate publishedDateTime, LocalDate endDateTime, Boolean active) {
+			@Size(min = 3, max = 15, message = "topic must be 3 to 15 characters long") Topic topic, Boolean active) {
 		super();
 		this.description = description;
 		this.topic = topic;
-		this.publishedDateTime = publishedDateTime;
-		this.endDateTime = endDateTime;
+		this.publishedDateTime = LocalDate.now();
+		this.endDateTime = LocalDate.now().plusYears(1);
 		this.active = active;
 	}
 
