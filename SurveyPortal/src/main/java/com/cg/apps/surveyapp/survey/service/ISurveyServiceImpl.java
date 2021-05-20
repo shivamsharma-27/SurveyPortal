@@ -79,9 +79,8 @@ public class ISurveyServiceImpl implements ISurveyService {
 			throw new SurveyNotFoundException(SurveyExceptionMessages.SURVEY_NOT_FOUND);
 		}
 		List<Participant> participants = new ArrayList<>();
-		for (Feedback feedbacks : sur.get().getFeedbacks()) {
-
-			participants.add(feedbacks.getParticipant());
+		for (Feedback feedback : sur.get().getFeedbacks()) {
+			participants.add(feedback.getParticipant());
 		}
 		logger.info(participants.toString());
 		return participants;
